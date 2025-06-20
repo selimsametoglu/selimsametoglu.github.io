@@ -6,9 +6,38 @@
   <title>Contact - Dr. Selim Sametoğlu</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      height: 100vh;
+      width: 200px;
+      background-color: #333;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding-top: 20px;
+    }
+
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      padding: 12px 20px;
+      display: block;
+    }
+
+    .sidebar a:hover {
+      background-color: #575757;
+    }
+
+    /* Main content */
+    .main {
+      flex-grow: 1;
+      padding: 40px;
       background-color: #f0f0f0;
-      margin: 40px;
     }
 
     h1 {
@@ -44,23 +73,35 @@
 </head>
 <body>
 
-  <div class="contact-info">
-    <h1>Contact</h1>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2 style="text-align: center;">Menu</h2>
+    <a href="index.html">Home</a>
+    <a href="page_2.html" target="_blank">Published academic work and ongoing projects</a>
+    <a href="#">CV</a>
+    <a href="contact.html">Contact (and socials)</a>
+  </div>
 
-    <p><strong>Email:</strong> selim.sametoglu@mpi.nl</p>
+  <!-- Main Content -->
+  <div class="main">
+    <div class="contact-info">
+      <h1>Contact</h1>
 
-    <p><strong>Affiliation:</strong><br>
-    Max Planck Institute for Psycholinguistics<br>
-    Wundtlaan 1, 6525 XD Nijmegen<br>
-    The Netherlands</p>
+      <p><strong>Email:</strong> selim.sametoglu@mpi.nl</p>
 
-    <p class="social-links">
-      <strong>Find me online:</strong><br>
-      <a href="https://bsky.app/profile/selimsametoglu.bsky.social" target="_blank">BlueSky</a>
-      <a href="https://scholar.google.com/citations?user=JAHk6pMAAAAJ&hl=nl&oi=ao" target="_blank">Google Scholar</a>
-      <a href="https://orcid.org/0000-0002-5447-5410" target="_blank">ORCID</a>
-      <a href="https://www.linkedin.com/in/selimsametoglu/" target="_blank">LinkedIn</a>
-    </p>
+      <p><strong>Affiliation:</strong><br>
+      Max Planck Institute for Psycholinguistics<br>
+      Wundtlaan 1, 6525 XD Nijmegen<br>
+      The Netherlands</p>
+
+      <p class="social-links">
+        <strong>Find me online:</strong><br>
+        <a href="https://bsky.app/profile/selimsametoglu.bsky.social" target="_blank">BlueSky</a>
+        <a href="https://scholar.google.com/citations?user=JAHk6pMAAAAJ&hl=nl&oi=ao" target="_blank">Google Scholar</a>
+        <a href="https://orcid.org/0000-0002-5447-5410" target="_blank">ORCID</a>
+        <a href="https://www.linkedin.com/in/selimsametoglu/" target="_blank">LinkedIn</a>
+      </p>
+    </div>
   </div>
 
 </body>
