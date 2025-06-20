@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parent-Child Vocab Game</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin: 0; padding: 0; background: #f0f8ff; }
+    h1 { margin-top: 20px; }
+    .track { display: flex; justify-content: space-around; margin: 40px auto; width: 90%; max-width: 600px; position: relative; }
+    .avatar { width: 50px; height: 50px; position: absolute; top: 0; transition: left 0.5s ease; }
+    .avatar.shake { animation: shake 0.5s; }
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(0); }
+    }
+    .track-line { height: 4px; background: #ccc; position: absolute; top: 25px; left: 0; right: 0; z-index: -1; }
+    .steps { width: 90%; max-width: 600px; margin: 20px auto; display: flex; justify-content: space-between; align-items: center; }
+    .question-area { margin-top: 20px; }
+    .button { padding: 10px 20px; font-size: 18px; margin: 10px; cursor: pointer; display: block; margin-left: auto; margin-right: auto; max-width: 300px; }
+    .img-button { background: none; border: none; cursor: pointer; margin: 10px; }
+    .img-button img { width: 100px; height: 100px; object-fit: contain; }
+    .avatar-select { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+    .avatar-option img { width: 60px; height: 60px; cursor: pointer; border: 2px solid transparent; border-radius: 8px; }
+    .avatar-option.selected img { border-color: #00f; }
+    .toybox-img { width: 60px; height: 60px; }
+    .end-screen { display: none; margin-top: 30px; font-size: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Race to the Toy Box</h1>
+  <div id="avatar-selection">
+    <h2>Select Parent Avatar</h2>
+    <div class="avatar-select" id="parent-avatar-select"></div>
+    <h2>Select Child Avatar</h2>
+    <div class="avatar-select" id="child-avatar-select"></div>
+    <button class="button" onclick="startGame()">Start Game</button>
+  </div>
+
+  <div class="track" style="display:none;">
+    <div style="position: absolute; display: flex; align-items: center; top: 0; transition: left 0.5s ease;" id="skateboard">
+      <img id="parent-avatar" class="avatar" src="" alt="Parent Avatar">
+      <img id="child-avatar" class="avatar" src="" alt="Child Avatar">
+      <img src="https://cdn-icons-png.flaticon.com/512/2967/2967481.png" alt="Skateboard" style="width: 80px; height: 30px; position: absolute; top: 30px; left: 10px; z-index: -1;">
+    </div>
+  </div>
+  <div class="track-line"></div>
+
+  <div class="steps">
+    <span>Start</span>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/Toy_Box_Icon.png" alt="Toy Box" class="toybox-img" />
+  </div>
+
+  <div class="question-area" style="display:none;">
+    <h2 id="question"></h2>
+    <div id="options"></div>
+  </div>
+
+  <div class="end-screen" id="end-screen">
+    <h2 id="end-message"></h2>
+    <p id="score-summary"></p>
+    <button class="button" onclick="location.reload()">Play Again</button>
+  </div>
+
+  <script>
+    const scoreThreshold = 15;
+    let selectedParentAvatar = "";
+    let selectedChildAvatar = "";
+    let turn = 0;
+    let parentScore = 0, childScore = 0;
+
+    function renderAvatarOptions(containerId, selectCallback) {
+      const container = document.getElementById(containerId);
+      const avatarChoices = [
+        { label: "Doll", image: "https://upload.wikimedia.org/wikipedia/commons/f/fc/Doll_icon.svg" },
+        { label: "Race Car", image: "https://upload.wikimedia.org/wikipedia/commons/8/84/Car_blue.png" },
+        { label: "Robot", image: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Robot_icon.svg" },
+        { label: "Plush Dog", image: "https://upload.wikimedia.org/wikipedia/commons/d/d9/Dog_head.jpg" }
+      ];
+      avatarChoices.forEach((avatar) => {
+        const div = document.createElement("div");
+        div.className = "avatar-option";
+        const img = document.createElement("img");
+        img.src = avatar.image;
+        img.alt = avatar.label;
+        img.onclick = () => {
+          document.querySelectorAll(`#${containerId} .avatar-option`).forEach(el => el.classList.remove("selected"));
+          div.classList.add("selected");
+          selectCallback(avatar.image);
+        };
+        div.appendChild(img);
+        container.appendChild(div);
+      });
+    }
+
+    window.onload = function() {
+      renderAvatarOptions("parent-avatar-select", img => selectedParentAvatar = img);
+      renderAvatarOptions("child-avatar-select", img => selectedChildAvatar = img);
+    };
+
+    function startGame() {
+      if (!selectedParentAvatar || !selectedChildAvatar) {
+        alert("Please select avatars for both parent and child.");
+        return;
+      }
+      document.getElementById("avatar-selection").style.display = "none";
+      document.querySelector(".track").style.display = "flex";
+      document.querySelector(".question-area").style.display = "block";
+      document.getElementById("parent-avatar").src = selectedParentAvatar;
+      document.getElementById("child-avatar").src = selectedChildAvatar;
+      updateDollPosition();
+      showNextQuestion();
+    }
+
+    function updateDollPosition() {
+      const totalScore = parentScore + childScore;
+      const percent = Math.min((totalScore / scoreThreshold) * 90, 90);
+      const skateboard = document.getElementById("skateboard");
+      skateboard.style.left = `${percent}%`;
+    }
+
+    function showEndScreen() {
+  sendScoreToSheet();
+  document.querySelector(".question-area").style.display = "none";
+  document.querySelector(".track").style.display = "none";
+  const end = document.getElementById("end-screen");
+
+  if (parentScore + childScore >= scoreThreshold) {
+    document.getElementById("end-message").textContent = "🎉 You've reached the Toy Box together!";
+    document.getElementById("score-summary").textContent = `Parent Score: ${parentScore}/10 | Child Score: ${childScore}/10
+Teamwork makes the dream work!`;
+  } else {
+    document.getElementById("end-message").textContent = "⛔ You didn't reach the Toy Box this time.";
+    document.getElementById("score-summary").textContent = `Parent Score: ${parentScore}/10 | Child Score: ${childScore}/10
+Try again and keep learning!`;
+  }
+
+  end.style.display = "block";
+    }
+
+    function showNextQuestion() {
+      const isParentTurn = turn % 2 === 0;
+      const currentIndex = Math.floor(turn / 2);
+      const questionElement = document.getElementById("question");
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+
+      if (parentScore + childScore >= scoreThreshold || currentIndex >= 10) return showEndScreen();
+
+      if (isParentTurn) {
+        const q = parentQuestions[currentIndex];
+        questionElement.textContent = `Parent: What does "${q.word}" mean?`;
+        q.options.forEach((opt, idx) => {
+          const btn = document.createElement("button");
+          btn.className = "button";
+          btn.textContent = opt;
+          btn.onclick = () => handleAnswer(idx === q.correct, true);
+          optionsDiv.appendChild(btn);
+        });
+      } else {
+        const q = childQuestions[currentIndex];
+        questionElement.textContent = `Child: ${q.prompt}`;
+        q.options.forEach((opt, idx) => {
+          const btn = document.createElement("button");
+          btn.className = "img-button";
+          btn.innerHTML = `<img src="${opt.image}" alt="${opt.label}" />`;
+          btn.onclick = () => handleAnswer(idx === q.correct, false);
+          optionsDiv.appendChild(btn);
+        });
+      }
+    }
+
+    function handleAnswer(correct, isParent) {
+      const avatar = document.getElementById(isParent ? "parent-avatar" : "child-avatar");
+      if (correct) {
+        if (isParent) parentScore++;
+        else childScore++;
+        updateDollPosition();
+      } else {
+        avatar.classList.add("shake");
+        setTimeout(() => avatar.classList.remove("shake"), 500);
+      }
+      turn++;
+      setTimeout(showNextQuestion, 600);
+    }
+
+    const parentQuestions = [
+      { word: "elated", options: ["Very Happy", "Tired", "Hungry", "Confused"], correct: 0 },
+      { word: "melancholy", options: ["Sad", "Joyful", "Angry", "Bored"], correct: 0 },
+      { word: "brisk", options: ["Quick", "Loud", "Slow", "Bright"], correct: 0 },
+      { word: "drenched", options: ["Soaked", "Cold", "Thirsty", "Messy"], correct: 0 },
+      { word: "vivid", options: ["Bright", "Dull", "Slow", "Thin"], correct: 0 },
+      { word: "fragile", options: ["Breakable", "Heavy", "Sharp", "Loud"], correct: 0 },
+      { word: "ancient", options: ["Old", "Fast", "Modern", "Young"], correct: 0 },
+      { word: "frequent", options: ["Often", "Rare", "Loud", "Quick"], correct: 0 },
+      { word: "exhausted", options: ["Very tired", "Happy", "Energetic", "Hungry"], correct: 0 },
+      { word: "generous", options: ["Giving", "Greedy", "Rude", "Quiet"], correct: 0 }
+    ];
+
+    const childQuestions = [
+  {
+    prompt: "Where is the 'ball'?",
+    options: [
+      { label: "Ball", image: "https://cdn-icons-png.flaticon.com/512/727/727399.png" },
+      { label: "Dog", image: "https://cdn-icons-png.flaticon.com/512/616/616408.png" },
+      { label: "Apple", image: "https://cdn-icons-png.flaticon.com/512/590/590685.png" },
+      { label: "Car", image: "https://cdn-icons-png.flaticon.com/512/743/743988.png" }
+    ],
+    correct: 0
+  },
+  {
+    prompt: "Where is the 'dog'?",
+    options: [
+      { label: "Fish", image: "https://cdn-icons-png.flaticon.com/512/1998/1998611.png" },
+      { label: "Dog", image: "https://cdn-icons-png.flaticon.com/512/616/616408.png" },
+      { label: "Chair", image: "https://cdn-icons-png.flaticon.com/512/4150/4150897.png" },
+      { label: "Tree", image: "https://cdn-icons-png.flaticon.com/512/616/616554.png" }
+    ],
+    correct: 1
+  },
+  {
+    prompt: "Where is the 'banana'?",
+    options: [
+      { label: "Shoe", image: "https://cdn-icons-png.flaticon.com/512/2917/2917996.png" },
+      { label: "Banana", image: "https://cdn-icons-png.flaticon.com/512/590/590787.png" },
+      { label: "Truck", image: "https://cdn-icons-png.flaticon.com/512/1995/1995574.png" },
+      { label: "Cloud", image: "https://cdn-icons-png.flaticon.com/512/414/414927.png" }
+    ],
+    correct: 1
+  },
+  {
+    prompt: "Where is the 'car'?",
+    options: [
+      { label: "House", image: "https://cdn-icons-png.flaticon.com/512/619/619153.png" },
+      { label: "Book", image: "https://cdn-icons-png.flaticon.com/512/3145/3145765.png" },
+      { label: "Car", image: "https://cdn-icons-png.flaticon.com/512/743/743988.png" },
+      { label: "Leaf", image: "https://cdn-icons-png.flaticon.com/512/728/728093.png" }
+    ],
+    correct: 2
+  },
+  {
+    prompt: "Where is the 'apple'?",
+    options: [
+      { label: "Banana", image: "https://cdn-icons-png.flaticon.com/512/590/590787.png" },
+      { label: "Apple", image: "https://cdn-icons-png.flaticon.com/512/590/590685.png" },
+      { label: "Shoe", image: "https://cdn-icons-png.flaticon.com/512/2917/2917996.png" },
+      { label: "Dog", image: "https://cdn-icons-png.flaticon.com/512/616/616408.png" }
+    ],
+    correct: 1
+  },
+  {
+    prompt: "Where is the 'cat'?",
+    options: [
+      { label: "Dog", image: "https://cdn-icons-png.flaticon.com/512/616/616408.png" },
+      { label: "Car", image: "https://cdn-icons-png.flaticon.com/512/743/743988.png" },
+      { label: "Cat", image: "https://cdn-icons-png.flaticon.com/512/616/616408.png" },
+      { label: "Fish", image: "https://cdn-icons-png.flaticon.com/512/1998/1998611.png" }
+    ],
+    correct: 2
+  },
+  {
+    prompt: "Where is the 'shoe'?",
+    options: [
+      { label: "Shoe", image: "https://cdn-icons-png.flaticon.com/512/2917/2917996.png" },
+      { label: "Chair", image: "https://cdn-icons-png.flaticon.com/512/4150/4150897.png" },
+      { label: "Book", image: "https://cdn-icons-png.flaticon.com/512/3145/3145765.png" },
+      { label: "Apple", image: "https://cdn-icons-png.flaticon.com/512/590/590685.png" }
+    ],
+    correct: 0
+  },
+  {
+    prompt: "Where is the 'fish'?",
+    options: [
+      { label: "Fish", image: "https://cdn-icons-png.flaticon.com/512/1998/1998611.png" },
+      { label: "Tree", image: "https://cdn-icons-png.flaticon.com/512/616/616554.png" },
+      { label: "Dog", image: "https://cdn-icons-png.flaticon.com/512/616/616408.png" },
+      { label: "House", image: "https://cdn-icons-png.flaticon.com/512/619/619153.png" }
+    ],
+    correct: 0
+  },
+  {
+    prompt: "Where is the 'tree'?",
+    options: [
+      { label: "Leaf", image: "https://cdn-icons-png.flaticon.com/512/728/728093.png" },
+      { label: "Tree", image: "https://cdn-icons-png.flaticon.com/512/616/616554.png" },
+      { label: "Book", image: "https://cdn-icons-png.flaticon.com/512/3145/3145765.png" },
+      { label: "Car", image: "https://cdn-icons-png.flaticon.com/512/743/743988.png" }
+    ],
+    correct: 1
+  },
+  {
+    prompt: "Where is the 'leaf'?",
+    options: [
+      { label: "Shoe", image: "https://cdn-icons-png.flaticon.com/512/2917/2917996.png" },
+      { label: "Leaf", image: "https://cdn-icons-png.flaticon.com/512/728/728093.png" },
+      { label: "Cloud", image: "https://cdn-icons-png.flaticon.com/512/414/414927.png" },
+      { label: "Truck", image: "https://cdn-icons-png.flaticon.com/512/1995/1995574.png" }
+    ],
+    correct: 1
+  }
+];
+  
+function sendScoreToSheet() {
+  const webhookURL = "https://docs.google.com/spreadsheets/d/1bMXEG-_PEEqdqWHoZvvSF3H8nznSiWEutfJmI13ER3s/edit?gid=0#gid=0"; // Replace with your actual Google Apps Script Web App URL
+  fetch(webhookURL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      parentScore: parentScore,
+      childScore: childScore
+    })
+  })
+  .then(res => console.log("Score submitted successfully!"))
+  .catch(err => console.error("Error submitting score:", err));
+}
+</script>
+</body>
+</html>
