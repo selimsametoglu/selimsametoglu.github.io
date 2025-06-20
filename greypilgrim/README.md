@@ -1,0 +1,3 @@
+-This is a sub project for gamification
+-it is unofficial and not intended for official data collection
+-first commit: 21-06-2025
