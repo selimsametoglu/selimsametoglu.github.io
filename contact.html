@@ -17,34 +17,37 @@
   <style>
     /* Cover photo only above main content */
     .header {
-    background-image: url('images/banner.png');
-    background-size: cover;
-    background-position: center;
-    height: 200px;   /* adjust as needed */
-    width: 100%;
-    text-align: center;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px; /* space between header and sub-content */
+      background-image: url('images/banner.png');
+      background-size: cover;
+      background-position: center;
+      height: 200px;   /* adjust as needed */
+      width: 100%;
+      text-align: center;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px; /* space between header and contact-info */
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     .header h1 {
-    background: rgba(0,0,0,0.5); /* optional overlay for readability */
-    padding: 10px 20px;
-    border-radius: 8px;
+      background: rgba(0,0,0,0.5); /* optional overlay for readability */
+      padding: 10px 20px;
+      border-radius: 8px;
     }
-    
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       display: flex;
+      background-color: lightgray;
+      min-height: 100vh;                     /* page at least one viewport tall */
+      align-items: stretch;                  /* default, but explicit */
     }
 
     /* Sidebar */
     .sidebar {
-      height: 100vh;
       width: 200px;
       background-color: #333;
       color: white;
@@ -67,19 +70,24 @@
     /* Main content */
     .main {
       flex-grow: 1;
-      padding: 40px;
-      background-color: #f0f0f0;
-    }
-
-    .contact-info {
-      background-color: #fff;
       padding: 20px;
-      border-radius: 8px;
-      max-width: 600px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background-color: lightgray;
+      max-width: 800px;
+      line-height: 1.6;
+      margin: 0 auto;
     }
 
-    .contact-info p {
+    .sub-content {
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      flex-grow: 1;
+      padding: 20px;
+      max-width: 800px;
+      line-height: 1.6;
+      margin: 0 auto;
+    }
+
+    .sub-content p {
       line-height: 1.6;
     }
 
@@ -115,7 +123,7 @@
     <div class="header">
       <h1> Contact information and social channels </h1>
     </div>
-    <div class="contact-info">
+    <div class="sub-content">
       <h1> Dr. Selim Sametoğlu </h1>
 
       <p><strong>Email:</strong> selim.sametoglu@mpi.nl</p>

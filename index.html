@@ -29,6 +29,7 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 20px; /* space between header and sub-content */
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     .header h1 {
@@ -42,11 +43,12 @@
       font-family: Arial, sans-serif;
       display: flex;
       background-color: lightgray;
+      min-height: 100vh;                     /* page at least one viewport tall */
+      align-items: stretch;                  /* default, but explicit */
     }
 
     /* Sidebar */
     .sidebar {
-      height: 100vh;
       width: 200px;
       background-color: #333;
       color: white;
