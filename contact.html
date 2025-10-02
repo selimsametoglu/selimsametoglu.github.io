@@ -15,6 +15,27 @@
   <title>Contact - Dr. Selim Sametoğlu</title>
   
   <style>
+    /* Cover photo only above main content */
+    .header {
+    background-image: url('images/banner.png');
+    background-size: cover;
+    background-position: center;
+    height: 200px;   /* adjust as needed */
+    width: 100%;
+    text-align: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px; /* space between header and sub-content */
+    }
+
+    .header h1 {
+    background: rgba(0,0,0,0.5); /* optional overlay for readability */
+    padding: 10px 20px;
+    border-radius: 8px;
+    }
+    
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -48,10 +69,6 @@
       flex-grow: 1;
       padding: 40px;
       background-color: #f0f0f0;
-    }
-
-    h1 {
-      color: #333;
     }
 
     .contact-info {
@@ -94,8 +111,12 @@
 
   <!-- Main Content -->
   <div class="main">
+        <!-- Cover banner only above main content -->
+    <div class="header">
+      <h1> Contact information and social channels </h1>
+    </div>
     <div class="contact-info">
-      <h1>Contact</h1>
+      <h1> Dr. Selim Sametoğlu </h1>
 
       <p><strong>Email:</strong> selim.sametoglu@mpi.nl</p>
 
