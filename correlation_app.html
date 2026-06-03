@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8B42HY0G95"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-8B42HY0G95');
+  </script>
+  <meta name="google-site-verification" content="n8Y6-GB7c-B_uplWl39cYQcMsCwc5tyY8WVZIPdoyiA" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Small Samples and Misleading Correlations | Dr. Selim Sametoğlu</title>
+<style>
+  :root {
+    --site-bg: lightgray;
+    --sidebar-bg: #333;
+    --sidebar-hover: #575757;
+    --content-bg: #fff;
+    --text: #202124;
+    --muted: #5f6368;
+    --border: #dadce0;
+    --accent: #0066cc;
+    --accent-strong: #1a73e8;
+    --danger: #b3261e;
+    --ok: #137333;
+    --shadow: 0 0 10px rgba(0,0,0,0.1);
+    --radius: 8px;
+    --line-height: 1.6;
+    --font-main: Arial, sans-serif;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-main);
+    display: flex;
+    background-color: var(--site-bg);
+    min-height: 100vh;
+    align-items: stretch;
+    color: var(--text);
+  }
+
+  /* Sidebar copied from the main website theme */
+  .sidebar {
+    width: 200px;
+    background-color: var(--sidebar-bg);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    flex-shrink: 0;
+  }
+
+  .sidebar h2 {
+    text-align: center;
+  }
+
+  .sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    display: block;
+  }
+
+  .sidebar a:hover {
+    background-color: var(--sidebar-hover);
+    text-decoration: none;
+  }
+
+  /* Main website layout */
+  .main {
+    flex-grow: 1;
+    padding: 20px;
+    max-width: 1200px;
+    line-height: var(--line-height);
+    margin: 0 auto;
+  }
+
+  .header {
+    background-image: url('images/banner.png');
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+    width: 100%;
+    text-align: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .header h1 {
+    background: rgba(0,0,0,0.5);
+    padding: 10px 20px;
+    border-radius: var(--radius);
+  }
+
+  .sub-content {
+    background-color: var(--content-bg);
+    box-shadow: var(--shadow);
+    flex-grow: 1;
+    padding: 20px;
+    line-height: var(--line-height);
+    margin: 0 auto;
+  }
+
+  .sub-content p {
+    line-height: var(--line-height);
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* App-specific layout inside the website theme */
+  .app-intro {
+    margin-top: 0;
+    color: var(--muted);
+    max-width: 950px;
+  }
+
+  .app-grid {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .panel {
+    background: var(--content-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  .controls {
+    position: sticky;
+    top: 10px;
+    align-self: start;
+  }
+
+  .control {
+    margin-bottom: 16px;
+  }
+
+  label {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-weight: 650;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  label span.value {
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  input[type="range"] {
+    width: 100%;
+  }
+
+  select, button {
+    font: inherit;
+  }
+
+  .btnrow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  button {
+    border: 1px solid var(--border);
+    background: white;
+    padding: 9px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  button.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  button:hover {
+    filter: brightness(0.98);
+  }
+
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .scenario-grid button {
+    text-align: left;
+  }
+
+  .charts {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  canvas {
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+  }
+
+  #scatter {
+    height: 520px;
+  }
+
+  #sampling {
+    height: 260px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .stat {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px;
+    background: #fff;
+  }
+
+  .stat .k {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .stat .v {
+    font-size: 20px;
+    font-weight: 750;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat .small {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .interpretation {
+    border-left: 4px solid var(--accent);
+    padding-left: 12px;
+    margin-top: 10px;
+    color: var(--text);
+  }
+
+  .danger {
+    color: var(--danger);
+    font-weight: 700;
+  }
+
+  .ok {
+    color: var(--ok);
+    font-weight: 700;
+  }
+
+  .note {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  details {
+    margin-top: 12px;
+  }
+
+  summary {
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  @media (max-width: 900px) {
+    .main {
+      padding: 12px;
+      max-width: calc(100vw - 224px);
+    }
+
+    .app-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .controls {
+      position: static;
+    }
+
+    .stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h2>Menu</h2>
+    <a href="index.html">Home</a>
+    <a href="page_2.html" target="_blank">Published academic work and ongoing projects</a>
+    <a href= "correlation_app.html"> Demo: Small samples can mislead correlations </a>
+    <a href="contact.html">Contact (and socials)</a>
+    <a href="privacy_policy.html">Privacy Policy</a>
+  </div>
+
+  <div class="main">
+    <div class="header">
+      <h1> Demonstration app I </h1>
+    </div>
+
+    <div class="sub-content">
+      <h1>Small samples can mislead correlations</h1>
+      <p class="app-intro">
+        This teaching app shows how a small sample from a desired population can distort the observed range,
+        skewness, outliers, correlation, confidence interval, and Type I / Type II error risk.
+      </p>
+
+      <div class="app-grid">
+        <section class="panel controls">
+          <h2 style="margin-top:0;font-size:18px;">Controls</h2>
+
+          <div class="control">
+            <label>True population correlation ρ <span class="value" id="rhoVal"></span></label>
+            <input id="rho" type="range" min="-0.9" max="0.9" step="0.05" value="0.30">
+          </div>
+
+          <div class="control">
+            <label>Sample size n <span class="value" id="nVal"></span></label>
+            <input id="n" type="range" min="5" max="300" step="1" value="15">
+          </div>
+
+          <div class="control">
+            <label>Population skewness <span class="value" id="skewVal"></span></label>
+            <input id="skew" type="range" min="0" max="2.2" step="0.1" value="0">
+          </div>
+
+          <div class="control">
+            <label>Noise / unexplained variation <span class="value" id="noiseVal"></span></label>
+            <input id="noise" type="range" min="0.2" max="2.5" step="0.1" value="1">
+          </div>
+
+          <div class="control">
+            <label>Range restriction in X <span class="value" id="rangeVal"></span></label>
+            <input id="rangeRestriction" type="range" min="0" max="0.9" step="0.05" value="0">
+          </div>
+
+          <div class="control">
+            <label>Outlier strength <span class="value" id="outlierVal"></span></label>
+            <input id="outlier" type="range" min="0" max="5" step="0.5" value="0">
+          </div>
+
+          <div class="control">
+            <label>Significance level α <span class="value" id="alphaVal"></span></label>
+            <input id="alpha" type="range" min="0.01" max="0.10" step="0.01" value="0.05">
+          </div>
+
+          <div class="btnrow">
+            <button class="primary" id="drawBtn">Draw new sample</button>
+            <button id="simBtn">Run 1000 samples</button>
+          </div>
+
+          <details open>
+            <summary>Teaching scenarios</summary>
+            <div class="scenario-grid" style="margin-top:10px;">
+              <button data-scenario="tiny">Tiny sample: unstable r</button>
+              <button data-scenario="falsePositive">False positive risk: true ρ = 0</button>
+              <button data-scenario="missedEffect">Type II risk: true effect, small n</button>
+              <button data-scenario="restricted">Restricted range hides effect</button>
+              <button data-scenario="skewed">Skewed population, unrepresentative sample</button>
+              <button data-scenario="outlier">One outlier drives r</button>
+              <button data-scenario="adequate">Larger n: more stable estimate</button>
+            </div>
+          </details>
+
+          <p class="note">
+            Grey dots = desired population. Blue dots = one observed sample. The dashed line is the sample regression line.
+          </p>
+        </section>
+
+        <section class="charts">
+          <div class="panel">
+            <div class="stats">
+              <div class="stat">
+                <div class="k">Observed sample r</div>
+                <div class="v" id="rStat">—</div>
+                <div class="small" id="rNote">—</div>
+              </div>
+              <div class="stat">
+                <div class="k">95% CI for r</div>
+                <div class="v" id="ciStat">—</div>
+                <div class="small">Fisher z approximation</div>
+              </div>
+              <div class="stat">
+                <div class="k">p-value</div>
+                <div class="v" id="pStat">—</div>
+                <div class="small" id="sigStat">—</div>
+              </div>
+              <div class="stat">
+                <div class="k">Current error label</div>
+                <div class="v" id="errorStat">—</div>
+                <div class="small">Given the true ρ setting</div>
+              </div>
+            </div>
+            <canvas id="scatter" width="900" height="520"></canvas>
+            <div class="interpretation" id="interpretation"></div>
+          </div>
+
+          <div class="panel">
+            <h2 style="margin-top:0;font-size:18px;">Repeated-sampling view</h2>
+            <p class="note">
+              Run many small samples from the same population. Each dot below is one sample correlation.
+              Red vertical lines mark r = 0 and the true population ρ.
+            </p>
+            <canvas id="sampling" width="900" height="260"></canvas>
+            <div class="stats" style="margin-top:12px;">
+              <div class="stat">
+                <div class="k">Significant samples</div>
+                <div class="v" id="sigRate">—</div>
+                <div class="small">p &lt; α</div>
+              </div>
+              <div class="stat">
+                <div class="k">Type I error rate</div>
+                <div class="v" id="type1Rate">—</div>
+                <div class="small">Only meaningful when true ρ = 0</div>
+              </div>
+              <div class="stat">
+                <div class="k">Type II error rate</div>
+                <div class="v" id="type2Rate">—</div>
+                <div class="small">Only meaningful when true ρ ≠ 0</div>
+              </div>
+              <div class="stat">
+                <div class="k">Mean sampled r</div>
+                <div class="v" id="meanR">—</div>
+                <div class="small">Across repeated samples</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+<script>
+let population = [];
+let currentSample = [];
+let repeatedRs = [];
+
+const ids = ["rho","n","skew","noise","rangeRestriction","outlier","alpha"];
+const el = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+
+function randn() {
+  let u = 0, v = 0;
+  while (u === 0) u = Math.random();
+  while (v === 0) v = Math.random();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+
+function mean(arr) { return arr.reduce((a,b)=>a+b,0) / arr.length; }
+
+function sd(arr) {
+  const m = mean(arr);
+  return Math.sqrt(arr.reduce((s,x)=>s+(x-m)**2,0)/(arr.length-1));
+}
+
+function corr(points) {
+  if (points.length < 3) return NaN;
+  const xs = points.map(d=>d.x), ys = points.map(d=>d.y);
+  const mx = mean(xs), my = mean(ys);
+  let num=0, dx=0, dy=0;
+  for (let i=0;i<points.length;i++) {
+    const a = xs[i]-mx, b = ys[i]-my;
+    num += a*b; dx += a*a; dy += b*b;
+  }
+  return num / Math.sqrt(dx*dy);
+}
+
+function regression(points) {
+  const xs = points.map(d=>d.x), ys = points.map(d=>d.y);
+  const mx = mean(xs), my = mean(ys);
+  let num=0, den=0;
+  for (let i=0;i<points.length;i++) {
+    num += (xs[i]-mx)*(ys[i]-my);
+    den += (xs[i]-mx)**2;
+  }
+  const b = num/den;
+  const a = my - b*mx;
+  return {a,b};
+}
+
+function logGamma(z) {
+  const g = 7;
+  const p = [
+    0.99999999999980993, 676.5203681218851, -1259.1392167224028,
+    771.32342877765313, -176.61502916214059, 12.507343278686905,
+    -0.13857109526572012, 9.9843695780195716e-6,
+    1.5056327351493116e-7
+  ];
+  if (z < 0.5) return Math.log(Math.PI) - Math.log(Math.sin(Math.PI*z)) - logGamma(1-z);
+  z -= 1;
+  let x = p[0];
+  for (let i=1; i<g+2; i++) x += p[i]/(z+i);
+  const t = z + g + 0.5;
+  return 0.5*Math.log(2*Math.PI) + (z+0.5)*Math.log(t) - t + Math.log(x);
+}
+
+function betacf(x, a, b) {
+  const MAXIT = 100, EPS = 3e-8, FPMIN = 1e-30;
+  let qab=a+b, qap=a+1, qam=a-1;
+  let c=1, d=1-qab*x/qap;
+  if (Math.abs(d)<FPMIN) d=FPMIN;
+  d=1/d;
+  let h=d;
+  for (let m=1; m<=MAXIT; m++) {
+    let m2=2*m;
+    let aa=m*(b-m)*x/((qam+m2)*(a+m2));
+    d=1+aa*d; if (Math.abs(d)<FPMIN) d=FPMIN;
+    c=1+aa/c; if (Math.abs(c)<FPMIN) c=FPMIN;
+    d=1/d; h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));
+    d=1+aa*d; if (Math.abs(d)<FPMIN) d=FPMIN;
+    c=1+aa/c; if (Math.abs(c)<FPMIN) c=FPMIN;
+    d=1/d;
+    const del=d*c;
+    h*=del;
+    if (Math.abs(del-1.0)<EPS) break;
+  }
+  return h;
+}
+
+function ibeta(x, a, b) {
+  if (x <= 0) return 0;
+  if (x >= 1) return 1;
+  const bt = Math.exp(logGamma(a+b)-logGamma(a)-logGamma(b) + a*Math.log(x) + b*Math.log(1-x));
+  if (x < (a+1)/(a+b+2)) return bt*betacf(x,a,b)/a;
+  return 1 - bt*betacf(1-x,b,a)/b;
+}
+
+function tCDF(t, df) {
+  const x = df / (df + t*t);
+  const ib = ibeta(x, df/2, 0.5);
+  if (t >= 0) return 1 - 0.5*ib;
+  return 0.5*ib;
+}
+
+function pFromR(r, n) {
+  if (!isFinite(r) || n < 3) return NaN;
+  if (Math.abs(r) >= 1) return 0;
+  const t = r * Math.sqrt((n-2)/(1-r*r));
+  return 2 * (1 - tCDF(Math.abs(t), n-2));
+}
+
+function ciForR(r, n) {
+  if (n <= 3 || Math.abs(r) >= 1) return [NaN, NaN];
+  const z = Math.atanh(r);
+  const se = 1/Math.sqrt(n-3);
+  return [Math.tanh(z - 1.96*se), Math.tanh(z + 1.96*se)];
+}
+
+function generatePopulation() {
+  const rho = parseFloat(el.rho.value);
+  const skew = parseFloat(el.skew.value);
+  const noise = parseFloat(el.noise.value);
+  const outlier = parseFloat(el.outlier.value);
+  const N = 4000;
+  let pts = [];
+  for (let i=0; i<N; i++) {
+    let z1 = randn();
+    let z2 = randn();
+    let x = z1;
+    let y = rho*z1 + Math.sqrt(Math.max(0,1-rho*rho))*z2*noise;
+
+    if (skew > 0) {
+      x = (Math.exp(skew*x/2) - Math.exp(skew*skew/8)) / Math.sqrt(Math.exp(skew*skew/2)-Math.exp(skew*skew/4));
+      y = (Math.exp(skew*y/2) - Math.exp(skew*skew/8)) / Math.sqrt(Math.exp(skew*skew/2)-Math.exp(skew*skew/4));
+    }
+    pts.push({x,y});
+  }
+  if (outlier > 0) {
+    pts.push({x: 2.7 + outlier*0.35, y: 2.7 + outlier*0.35, outlier: true});
+  }
+  population = standardizePoints(pts);
+}
+
+function standardizePoints(pts) {
+  const mx = mean(pts.map(d=>d.x)), sx = sd(pts.map(d=>d.x));
+  const my = mean(pts.map(d=>d.y)), sy = sd(pts.map(d=>d.y));
+  return pts.map(d => ({x:(d.x-mx)/sx, y:(d.y-my)/sy, outlier:d.outlier || false}));
+}
+
+function sampleFromPopulation() {
+  const n = parseInt(el.n.value);
+  const restriction = parseFloat(el.rangeRestriction.value);
+  let pool = population;
+
+  if (restriction > 0) {
+    const width = 1.96 * (1 - restriction);
+    pool = population.filter(d => Math.abs(d.x) < Math.max(0.15, width));
+    if (pool.length < n) pool = population;
+  }
+
+  let sample = [];
+  for (let i=0; i<n; i++) {
+    sample.push(pool[Math.floor(Math.random()*pool.length)]);
+  }
+  return sample;
+}
+
+function ranges(points) {
+  const xs = points.map(d=>d.x), ys = points.map(d=>d.y);
+  const all = xs.concat(ys);
+  const min = Math.min(...all, -3), max = Math.max(...all, 3);
+  const pad = (max-min)*0.08;
+  return {min:min-pad, max:max+pad};
+}
+
+function drawScatter() {
+  const canvas = document.getElementById("scatter");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const pad = 46;
+  const r = ranges(population.concat(currentSample));
+  const xScale = x => pad + (x-r.min)/(r.max-r.min)*(canvas.width-2*pad);
+  const yScale = y => canvas.height-pad - (y-r.min)/(r.max-r.min)*(canvas.height-2*pad);
+
+  ctx.strokeStyle = "#dadce0";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad, canvas.height-pad); ctx.lineTo(canvas.width-pad, canvas.height-pad);
+  ctx.moveTo(pad, pad); ctx.lineTo(pad, canvas.height-pad);
+  ctx.stroke();
+
+  ctx.strokeStyle = "#eeeeee";
+  ctx.beginPath();
+  ctx.moveTo(xScale(0), pad); ctx.lineTo(xScale(0), canvas.height-pad);
+  ctx.moveTo(pad, yScale(0)); ctx.lineTo(canvas.width-pad, yScale(0));
+  ctx.stroke();
+
+  ctx.globalAlpha = 0.18;
+  ctx.fillStyle = "#5f6368";
+  for (let i=0; i<population.length; i+=3) {
+    const d = population[i];
+    ctx.beginPath();
+    ctx.arc(xScale(d.x), yScale(d.y), d.outlier ? 5 : 2, 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  const reg = regression(currentSample);
+  if (isFinite(reg.b)) {
+    ctx.strokeStyle = "#174ea6";
+    ctx.setLineDash([7,5]);
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    const x1 = r.min, x2 = r.max;
+    ctx.moveTo(xScale(x1), yScale(reg.a + reg.b*x1));
+    ctx.lineTo(xScale(x2), yScale(reg.a + reg.b*x2));
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  ctx.fillStyle = "#1a73e8";
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 1;
+  for (const d of currentSample) {
+    ctx.beginPath();
+    ctx.arc(xScale(d.x), yScale(d.y), d.outlier ? 7 : 4.5, 0, Math.PI*2);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = "#5f6368";
+  ctx.font = "13px system-ui";
+  ctx.fillText("X", canvas.width - pad + 16, canvas.height-pad+4);
+  ctx.fillText("Y", pad - 18, pad - 12);
+}
+
+function drawSampling() {
+  const canvas = document.getElementById("sampling");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const pad = 42;
+  const xScale = r => pad + (r+1)/2*(canvas.width-2*pad);
+  const yMid = canvas.height/2;
+
+  ctx.strokeStyle = "#dadce0";
+  ctx.beginPath();
+  ctx.moveTo(pad, yMid); ctx.lineTo(canvas.width-pad, yMid);
+  ctx.stroke();
+
+  for (let tick=-1; tick<=1.01; tick+=0.5) {
+    const x = xScale(tick);
+    ctx.strokeStyle = "#eeeeee";
+    ctx.beginPath(); ctx.moveTo(x, 30); ctx.lineTo(x, canvas.height-40); ctx.stroke();
+    ctx.fillStyle = "#5f6368";
+    ctx.font = "12px system-ui";
+    ctx.fillText(tick.toFixed(1), x-12, canvas.height-18);
+  }
+
+  const rho = parseFloat(el.rho.value);
+  ctx.strokeStyle = "#b3261e";
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(xScale(0), 30); ctx.lineTo(xScale(0), canvas.height-45); ctx.stroke();
+  ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(xScale(rho), 30); ctx.lineTo(xScale(rho), canvas.height-45); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.lineWidth = 1;
+
+  ctx.fillStyle = "#1a73e8";
+  ctx.globalAlpha = 0.55;
+  repeatedRs.forEach((r,i) => {
+    const jitter = (Math.random()-0.5)*140;
+    ctx.beginPath();
+    ctx.arc(xScale(Math.max(-1, Math.min(1, r))), yMid + jitter, 3, 0, Math.PI*2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+
+  ctx.fillStyle = "#5f6368";
+  ctx.font = "13px system-ui";
+  ctx.fillText("Each dot = one sample correlation", pad, 20);
+  ctx.fillText("solid red: r = 0; dashed red: true ρ", pad, 38);
+}
+
+function updateLabels() {
+  document.getElementById("rhoVal").textContent = Number(el.rho.value).toFixed(2);
+  document.getElementById("nVal").textContent = el.n.value;
+  document.getElementById("skewVal").textContent = Number(el.skew.value).toFixed(1);
+  document.getElementById("noiseVal").textContent = Number(el.noise.value).toFixed(1);
+  document.getElementById("rangeVal").textContent = Math.round(Number(el.rangeRestriction.value)*100) + "%";
+  document.getElementById("outlierVal").textContent = Number(el.outlier.value).toFixed(1);
+  document.getElementById("alphaVal").textContent = Number(el.alpha.value).toFixed(2);
+}
+
+function updateStats() {
+  const r = corr(currentSample);
+  const n = currentSample.length;
+  const p = pFromR(r,n);
+  const ci = ciForR(r,n);
+  const alpha = parseFloat(el.alpha.value);
+  const rho = parseFloat(el.rho.value);
+  const sig = p < alpha;
+
+  document.getElementById("rStat").textContent = isFinite(r) ? r.toFixed(2) : "—";
+  document.getElementById("rNote").textContent = "Population ρ setting = " + rho.toFixed(2);
+  document.getElementById("ciStat").textContent = isFinite(ci[0]) ? "[" + ci[0].toFixed(2) + ", " + ci[1].toFixed(2) + "]" : "—";
+  document.getElementById("pStat").textContent = isFinite(p) ? p.toFixed(3) : "—";
+  document.getElementById("sigStat").innerHTML = sig ? "<span class='danger'>significant</span>" : "not significant";
+
+  let errorLabel = "—";
+  if (Math.abs(rho) < 0.0001 && sig) errorLabel = "Type I error";
+  else if (Math.abs(rho) < 0.0001 && !sig) errorLabel = "Correct non-detection";
+  else if (Math.abs(rho) >= 0.0001 && sig) errorLabel = "Detected effect";
+  else if (Math.abs(rho) >= 0.0001 && !sig) errorLabel = "Type II error";
+  document.getElementById("errorStat").textContent = errorLabel;
+
+  const sampleX = currentSample.map(d=>d.x);
+  const popX = population.map(d=>d.x);
+  const sampleRange = Math.max(...sampleX) - Math.min(...sampleX);
+  const popRange = Math.max(...popX) - Math.min(...popX);
+
+  let msg = "";
+  if (n < 20) msg += "This is a very small sample: the observed r can be very unstable. ";
+  if (sampleRange < popRange*0.35) msg += "The sample has restricted X range, which can hide a real relationship. ";
+  if (parseFloat(el.outlier.value) > 0 && currentSample.some(d=>d.outlier)) msg += "An outlier is included; in small samples, one point can dominate the correlation. ";
+  if (sig && Math.abs(rho) < 0.0001) msg += "Here the test is significant even though the true correlation is zero: a false positive / Type I error. ";
+  if (!sig && Math.abs(rho) > 0.0001) msg += "Here the test is not significant even though the true correlation is non-zero: a false negative / Type II error. ";
+  if (!msg) msg = "Draw another sample to show students how the same population can produce different-looking samples.";
+
+  document.getElementById("interpretation").textContent = msg;
+}
+
+function runOne() {
+  updateLabels();
+  generatePopulation();
+  currentSample = sampleFromPopulation();
+  repeatedRs = [];
+  updateStats();
+  drawScatter();
+  drawSampling();
+}
+
+function runSim() {
+  updateLabels();
+  generatePopulation();
+  const reps = 1000;
+  const alpha = parseFloat(el.alpha.value);
+  const rho = parseFloat(el.rho.value);
+  let sigs = 0, type1 = 0, type2 = 0;
+  repeatedRs = [];
+
+  for (let i=0; i<reps; i++) {
+    const s = sampleFromPopulation();
+    const r = corr(s);
+    const p = pFromR(r, s.length);
+    repeatedRs.push(r);
+    if (p < alpha) sigs++;
+    if (Math.abs(rho) < 0.0001 && p < alpha) type1++;
+    if (Math.abs(rho) >= 0.0001 && p >= alpha) type2++;
+  }
+
+  const meanSampleR = mean(repeatedRs.filter(isFinite));
+  document.getElementById("sigRate").textContent = Math.round(100*sigs/reps) + "%";
+  document.getElementById("type1Rate").textContent = Math.abs(rho) < 0.0001 ? Math.round(100*type1/reps) + "%" : "n/a";
+  document.getElementById("type2Rate").textContent = Math.abs(rho) >= 0.0001 ? Math.round(100*type2/reps) + "%" : "n/a";
+  document.getElementById("meanR").textContent = meanSampleR.toFixed(2);
+
+  currentSample = sampleFromPopulation();
+  updateStats();
+  drawScatter();
+  drawSampling();
+}
+
+function setScenario(name) {
+  const settings = {
+    tiny: {rho:0.30, n:8, skew:0, noise:1, rangeRestriction:0, outlier:0, alpha:0.05},
+    falsePositive: {rho:0.00, n:10, skew:0.4, noise:1, rangeRestriction:0, outlier:0, alpha:0.05},
+    missedEffect: {rho:0.40, n:12, skew:0, noise:1.2, rangeRestriction:0, outlier:0, alpha:0.05},
+    restricted: {rho:0.50, n:20, skew:0, noise:1, rangeRestriction:0.75, outlier:0, alpha:0.05},
+    skewed: {rho:0.30, n:15, skew:1.5, noise:1, rangeRestriction:0, outlier:0, alpha:0.05},
+    outlier: {rho:0.00, n:8, skew:0, noise:1, rangeRestriction:0, outlier:5, alpha:0.05},
+    adequate: {rho:0.30, n:120, skew:0, noise:1, rangeRestriction:0, outlier:0, alpha:0.05}
+  }[name];
+
+  for (const [k,v] of Object.entries(settings)) el[k].value = v;
+  runOne();
+  runSim();
+}
+
+document.getElementById("drawBtn").addEventListener("click", runOne);
+document.getElementById("simBtn").addEventListener("click", runSim);
+document.querySelectorAll("[data-scenario]").forEach(btn => {
+  btn.addEventListener("click", () => setScenario(btn.dataset.scenario));
+});
+ids.forEach(id => el[id].addEventListener("input", runOne));
+
+runOne();
+</script>
+</body>
+</html>
