@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-8B42HY0G95"></script>
   <script>
@@ -10,32 +11,40 @@
 
     gtag('config', 'G-8B42HY0G95');
   </script>
+
   <meta name="google-site-verification" content="n8Y6-GB7c-B_uplWl39cYQcMsCwc5tyY8WVZIPdoyiA" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> Dr. Selim Sametoğlu </title>
+  <title>Dr. Selim Sametoğlu</title>
+
+  <!-- Bluesky feed component -->
+  <script
+    type="module"
+    src="https://cdn.jsdelivr.net/npm/bsky-embed/dist/bsky-embed.es.js"
+    async>
+  </script>
 
   <style>
     /* Cover photo only above main content */
     .header {
-    background-image: url('images/banner.png');
-    background-size: cover;
-    background-position: center;
-    height: 200px;   /* adjust as needed */
-    width: 100%;
-    text-align: center;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px; /* space between header and sub-content */
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background-image: url('images/banner.png');
+      background-size: cover;
+      background-position: center;
+      height: 200px;
+      width: 100%;
+      text-align: center;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
 
     .header h1 {
-    background: rgba(0,0,0,0.5); /* optional overlay for readability */
-    padding: 10px 20px;
-    border-radius: 8px;
+      background: rgba(0,0,0,0.5);
+      padding: 10px 20px;
+      border-radius: 8px;
     }
 
     body {
@@ -43,8 +52,8 @@
       font-family: Arial, sans-serif;
       display: flex;
       background-color: lightgray;
-      min-height: 100vh;                     /* page at least one viewport tall */
-      align-items: stretch;                  /* default, but explicit */
+      min-height: 100vh;
+      align-items: stretch;
     }
 
     /* Sidebar */
@@ -77,8 +86,10 @@
       margin: 0 auto;
     }
 
-  
-    .main img { max-width: 100%; height: auto; display: block; 
+    .main img {
+      max-width: 100%;
+      height: auto;
+      display: block;
     }
 
     .sub-content {
@@ -103,10 +114,17 @@
     a:hover {
       text-decoration: underline;
     }
-  
+
+    /* Space above the Bluesky section */
+    .bluesky-section {
+      margin-top: 32px;
+    }
+
+    .bluesky-section bsky-embed {
+      display: block;
+      max-width: 100%;
+    }
   </style>
-
-
 </head>
 
 <body>
@@ -116,74 +134,89 @@
     <h2>Menu</h2>
     <a href="index.html">Home</a>
     <a href="page_2.html" target="_blank">Published academic work and ongoing projects</a>
-    <a href= "correlation_app.html"> Demo: Small samples can mislead correlations </a>
+    <a href="correlation_app.html">Demo: Small samples can mislead correlations</a>
     <a href="contact.html">Contact (and socials)</a>
     <a href="artwork.html">Artwork</a>
     <a href="privacy_policy.html">Privacy Policy</a>
   </div>
-
-
-
-
 
   <div class="main">
     <!-- Cover banner only above main content -->
     <div class="header">
       <h1>Dr. Selim Sametoğlu</h1>
     </div>
-  
+
     <div class="sub-content">
       <h1>Who am I?</h1>
-  
+
       <img src="images/banner_profile.png" alt="profile picture" width="100%">
-  
+
       <h2>Current work</h2>
-  
+
       <p>
         <b>
           I currently work as a postdoctoral researcher at the internationally renowned Max Planck Institute for Psycholinguistics in Nijmegen. My current work has two main focuses. First, I study the complex genetic and environmental pathways that contribute to, or hinder, children’s development, with a particular emphasis on language development. Second, I work on developing scalable and cost-effective methods for assessing children’s language development.
         </b>
       </p>
-  
+
       <p>
         For the first research line, I work with large population-based cohort datasets, such as the Netherlands Twin Register, and combine genetically informed approaches, including classical twin designs and polygenic score analyses. For the second research line, I am currently leading the development and formal validation of the NL-CDI: CAT, a cost-effective and scalable computerized adaptive assessment of children’s language development. The NL-CDI: CAT is a Dutch adaptation of the widely used MacArthur-Bates Communicative Development Inventories. The formal validation project is currently ongoing and is expected to be finalized in the near future.
       </p>
-  
+
       <p>
         Make sure to check out
         <a rel="nofollow" href="https://selimsametoglu.github.io/page_2.html" target="_blank">this page</a>
         to see an up-to-date list of my relevant work.
       </p>
-  
+
       <h2>Broader expertise</h2>
-  
+
       <p>
         More broadly, my work combines expertise in genetically informed research designs, traditional psychometric assessment, and novel methods for measuring human behavior at scale.
       </p>
-  
+
       <h2>Education and background</h2>
-  
+
       <p>
         I received my Research Master’s degree in Individual Differences and Assessment from Tilburg University in 2020, where I built a strong foundation in the theory, assessment, and modeling of individual differences in human behavior.
       </p>
-  
+
       <p>
         I completed my PhD at Vrije Universiteit Amsterdam in 2025. My dissertation investigated shared heritable influences on social media use and wellbeing, with a particular focus on using digital behavior, such as language on social media, to assess wellbeing. This work shows how social media-based assessments can complement traditional survey methods and provide richer insights into wellbeing at both the individual and population levels.
       </p>
-  
+
       <h2>Collaboration and outreach</h2>
-  
+
       <p>
         I am happy to be contacted about potential collaborations on research that combines traditional survey data, digital traces, and large genetically informative datasets or designs. You may also contact me for science communication activities, including blog posts, magazine articles, and other forms of public engagement.
       </p>
-  
+
       <h2>More about me</h2>
-  
+
       <p>
         Outside of my academic work, I enjoy woodcarving, painting, cycling from one city to another, and drawing figures for teaching materials/courses/and presentations. I hope to share more of these creative projects more systematically on this personal website very soon!
       </p>
+
+      <!-- Bluesky feed -->
+      <section class="bluesky-section" aria-labelledby="bluesky-heading">
+        <h2 id="bluesky-heading">Latest on Bluesky</h2>
+
+        <p>
+          <a
+            href="https://bsky.app/profile/selimsametoglu.bluesky.social"
+            target="_blank"
+            rel="noopener noreferrer">
+            View my profile on Bluesky
+          </a>
+        </p>
+
+        <bsky-embed
+          username="selimsametoglu.bluesky.social"
+          limit="3">
+        </bsky-embed>
+      </section>
     </div>
-  </div>  
-  
+  </div>
+
 </body>
 </html>
